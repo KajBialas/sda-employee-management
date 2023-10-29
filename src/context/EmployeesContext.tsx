@@ -13,7 +13,9 @@ type EmployeeType = {
   phone: string;
 };
 
-type EmployeesContextProps = {};
+type EmployeesContextProps = {
+  employeesList: EmployeeType[];
+};
 
 type EmployeesProviderProps = {
   children: JSX.Element;
@@ -48,7 +50,7 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
   }, []);
 
   return (
-    <EmployeesContext.Provider value={employeesList}>
+    <EmployeesContext.Provider value={{ employeesList }}>
       {children}
     </EmployeesContext.Provider>
   );
