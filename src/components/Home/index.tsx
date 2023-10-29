@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import "./Home.scss";
 
 export const Home = () => {
@@ -8,11 +7,6 @@ export const Home = () => {
       <p className="home__employees">Number of activ Employees: {10} </p>
       <h4 className="homepage__text">Employees List</h4>
       <button type="submit">Go to List</button>
-      <Homepage />
     </div>
   );
-};
-
-export const Homepage = () => {
-  return <div>Go</div>;
 };
