@@ -36,7 +36,7 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
         throw new Error("Somethnig went wrong while fetching Employees");
 
       const data = await response.json();
-      console.log(data);
+      setEmployeesList(data);
       return data;
     } catch (error) {
       throw new Error();
