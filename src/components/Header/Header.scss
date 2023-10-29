@@ -1,12 +1,15 @@
 .header {
-  display: block;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 20px;
+
   &__title {
-    text-align: center;
+    text-align: left;
   }
   &__list {
     list-style: none;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
   }
   &__list-item {
@@ -19,5 +22,8 @@
     transition: 0.5s;
     scale: 1.2;
     color: blue;
+    border: 0px;
+    border-radius: 5px;
+    background-color: aquamarine;
   }
 }

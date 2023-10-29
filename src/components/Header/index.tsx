@@ -1,5 +1,6 @@
 import "./Header.scss";
 import { NavLink } from "react-router-dom";
+import { Browser } from "../Browser";
 
 export const Header = () => {
   return (
@@ -17,8 +18,8 @@ export const Header = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to={"/"} className="header__list-item">
-            Browser
+          <NavLink to={"/Browser"} className="header__list-item">
+            <Browser />
           </NavLink>
         </li>
       </ul>
