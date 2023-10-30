@@ -10,6 +10,7 @@ export const Browser = () => {
   return (
     <div>
       <input
+        className="browser"
         type="text"
         value={inputValue}
         onChange={handleInputChange}

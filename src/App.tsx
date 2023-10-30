@@ -8,19 +8,17 @@ import { Header } from "./components/Header";
 
 function App() {
   return (
-    <div className="container">
-      <>
-        <Header />
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<Home />} />;
-            <Route path="/employees" element={<EmployeesList />} />;
-            <Route path="/employees/:id" element={<EmployeeDetails />} />;
-          </Routes>
-        </div>
-        <Footer />
-      </>
-    </div>
+    <>
+      <Header />
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />;
+          <Route path="/employees" element={<EmployeesList />} />;
+          <Route path="/employees/:id" element={<EmployeeDetails />} />;
+        </Routes>
+      </div>
+      <Footer />
+    </>
   );
 }
 
