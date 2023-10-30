@@ -1,21 +1,36 @@
 import "./Browser.scss";
 import React, { useState } from "react";
 
-export const Browser = () => {
-  const [inputValue, setInputValue] = useState("");
-  const handleInputChange = () => {
-    setInputValue("");
+import { EmployeeDetails } from "../EmployeeDetails";
+import { EmployeesList } from "../EmployeesList";
+
+export const Browser: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<Employee[]>([]);
+
+  const handleSearch = (query: string) => {
+    const filteredEmployees = employees.filter((employee) =>
+      employee.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setSearchResults(filteredEmployees);
   };
 
   return (
     <div>
       <input
-        className="browser"
-        type="text"
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder="Search employee"
+        type="search"
+        placeholder="Search employee..."
+        value={searchTerm}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          handleSearch(e.target.value);
+        }}
       />
+      <ul>
+        {searchResults.map((employee) => (
+          <li key={employee.id}>{employee.name}</li>
+        ))}
+      </ul>
     </div>
   );
 };
