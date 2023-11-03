@@ -23,7 +23,7 @@ type EmployeesProviderProps = {
 
 const URL = "http://localhost:5000";
 
-const EmployeesContext = createContext<EmployeesContextProps>(
+export const EmployeesContext = createContext<EmployeesContextProps>(
   {} as EmployeesContextProps
 );
 
