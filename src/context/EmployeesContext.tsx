@@ -23,13 +23,14 @@ type EmployeesProviderProps = {
 
 const URL = "http://localhost:5000";
 
-const EmployeesContext = createContext<EmployeesContextProps>(
+export const EmployeesContext = createContext<EmployeesContextProps>(
   {} as EmployeesContextProps
 );
 
 export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
   const [employeesList, setEmployeesList] = useState<EmployeeType[]>([]);
 
+  // wprowadzamy funkcję do pobrania danych
   const getEmployees = async () => {
     try {
       const response = await fetch(`${URL}/employees`);
