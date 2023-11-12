@@ -1,34 +1,28 @@
+import React, { useState, useContext } from "react";
 import "./Browser.scss";
-import React, { useState } from "react";
+import { EmployeesContext } from "../../context/EmployeesContext";
 
-import { EmployeeDetails } from "../EmployeeDetails";
-import { EmployeesList } from "../EmployeesList";
+export const Browser = () => {
+  const { employeesList } = useContext(EmployeesContext);
+  const [searchTerm, setSearchTerm] = useState("");
 
-export const Browser: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<Employee[]>([]);
-
-  const handleSearch = (query: string) => {
-    const filteredEmployees = employees.filter((employee) =>
-      employee.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchResults(filteredEmployees);
-  };
+  const filteredEmployees = employeesList.filter((employee) =>
+    employee.lastName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
       <input
         type="search"
-        placeholder="Search employee..."
+        placeholder="Search employees..."
         value={searchTerm}
-        onChange={(e) => {
-          setSearchTerm(e.target.value);
-          handleSearch(e.target.value);
-        }}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
       <ul>
-        {searchResults.map((employee) => (
-          <li key={employee.id}>{employee.name}</li>
+        {filteredEmployees.map((employee) => (
+          <li key={employee.id}>
+            {employee.lastName} - {employee.id}
+          </li>
         ))}
       </ul>
     </div>
