@@ -1,13 +1,13 @@
 .header-box {
   width: 100%;
-  height: 100%;
+  height: 250px;
+  display: flex;
+  background-color: black;
 }
 .header {
   width: 50%;
-  float: left;
   box-sizing: border-box;
   padding: 5px;
-  background-color: rgb(0, 0, 0);
   font-size: 20px;
   line-height: 2;
 
@@ -39,16 +39,9 @@
   }
   &__list-item-searching {
     margin-left: 20px;
+    padding: 5px;
   }
 }
 .logo-box {
   width: 50%;
-  float: left;
-  box-sizing: border-box;
-}
-
-.logo-box {
-  width: 50%;
-  float: left;
-  box-sizing: border-box;
 }
