@@ -10,16 +10,18 @@ import { EmployeesProvider } from "./context/EmployeesContext";
 function App() {
   return (
     <>
-      <Header />
       <>
         <EmployeesProvider>
-          <div className="App">
-            <Routes>
-              <Route path="/" element={<Home />} />;
-              <Route path="/employees" element={<EmployeesList />} />;
-              <Route path="/employees/:id" element={<EmployeeDetails />} />;
-            </Routes>
-          </div>
+          <>
+            <Header />
+            <div className="App">
+              <Routes>
+                <Route path="/" element={<Home />} />;
+                <Route path="/employees" element={<EmployeesList />} />;
+                <Route path="/employees/:id" element={<EmployeeDetails />} />;
+              </Routes>
+            </div>
+          </>
         </EmployeesProvider>
       </>
       <Footer />
