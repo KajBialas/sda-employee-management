@@ -7,12 +7,15 @@ export const EmployeeDetails = () => {
   const { id } = useParams();
 
   const {
-    editEmployeeInput,
+    employee,
     isEditable,
+    allowDelete,
     handleEditEmployeeInput,
     handleEditEmployee,
     getSingleEmployee,
     toggleEditing,
+    setAllowDelete,
+    handleDelete,
   } = useContext(EmployeesContext);
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export const EmployeeDetails = () => {
             id="firstName"
             type="text"
             name="firstName"
-            value={editEmployeeInput.firstName}
+            value={employee.firstName}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
             required
@@ -41,7 +44,7 @@ export const EmployeeDetails = () => {
             id="lastName"
             type="text"
             name="lastName"
-            value={editEmployeeInput.lastName}
+            value={employee.lastName}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
             required
@@ -55,7 +58,7 @@ export const EmployeeDetails = () => {
             name="birthDate"
             required
             pattern="\d{4}-\d{2}-\d{2}"
-            value={editEmployeeInput.birthDate}
+            value={employee.birthDate}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
           />
@@ -66,7 +69,7 @@ export const EmployeeDetails = () => {
             id="address"
             type="text"
             name="address"
-            value={editEmployeeInput.address}
+            value={employee.address}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
             required
@@ -78,7 +81,7 @@ export const EmployeeDetails = () => {
             id="city"
             type="text"
             name="city"
-            value={editEmployeeInput.city}
+            value={employee.city}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
             required
@@ -90,7 +93,7 @@ export const EmployeeDetails = () => {
             id="postalCode"
             type="text"
             name="postalCode"
-            value={editEmployeeInput.postalCode}
+            value={employee.postalCode}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
             required
@@ -102,7 +105,7 @@ export const EmployeeDetails = () => {
             id="salary"
             type="number"
             name="salary"
-            value={editEmployeeInput.salary}
+            value={employee.salary}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
             required
@@ -114,7 +117,7 @@ export const EmployeeDetails = () => {
             id="status"
             type="text"
             name="status"
-            value={editEmployeeInput.status}
+            value={employee.status}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
             required
@@ -126,7 +129,7 @@ export const EmployeeDetails = () => {
             id="phone"
             type="text"
             name="phone"
-            value={editEmployeeInput.phone}
+            value={employee.phone}
             onChange={handleEditEmployeeInput}
             disabled={!isEditable}
             required
@@ -147,6 +150,17 @@ export const EmployeeDetails = () => {
           </>
         )}
       </form>
+      <button type="button" onClick={() => setAllowDelete(true)}>
+        Usuń
+      </button>
+      {allowDelete && (
+        <div>
+          Czy na pewno chcesz usunąć {employee.firstName} {employee.lastName} z
+          listy pracowników?
+          <button onClick={handleDelete}>Tak</button>
+          <button onClick={() => setAllowDelete(false)}>Nie</button>
+        </div>
+      )}
     </div>
   );
 };

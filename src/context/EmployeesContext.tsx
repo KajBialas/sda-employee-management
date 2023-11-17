@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 type EmployeeType = {
   id?: number;
@@ -23,14 +24,17 @@ type EmployeeType = {
 type EmployeesContextProps = {
   employeesList: EmployeeType[];
   newEmployeeInput: EmployeeType;
-  editEmployeeInput: EmployeeType;
+  employee: EmployeeType;
   isEditable: boolean;
+  allowDelete: boolean;
   handleNewEmployeeInput: (event: ChangeEvent<HTMLInputElement>) => void;
   handleNewEmployeeSubmit: (event: FormEvent<HTMLFormElement>) => void;
   getSingleEmployee: (id: string) => Promise<any>;
   handleEditEmployeeInput: (event: ChangeEvent<HTMLInputElement>) => void;
   handleEditEmployee: (event: FormEvent<HTMLFormElement>) => void;
   toggleEditing: (id: string) => void;
+  setAllowDelete: React.Dispatch<React.SetStateAction<boolean>>;
+  handleDelete: () => void;
 };
 
 type EmployeesProviderProps = {
@@ -56,10 +60,11 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     status: "",
     phone: "",
   });
-  const [editEmployeeInput, setEditEmployeeInput] = useState(
-    {} as EmployeeType
-  );
+  const [employee, setEmployee] = useState({} as EmployeeType);
   const [isEditable, setIsEditable] = useState(false);
+  const [allowDelete, setAllowDelete] = useState(false);
+
+  const navigate = useNavigate();
 
   // wprowadzamy funkcję do pobrania danych
   const getEmployees = async () => {
@@ -87,7 +92,7 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
 
       const data = await response.json();
 
-      setEditEmployeeInput(data);
+      setEmployee(data);
       return data;
     } catch (error) {
       throw new Error();
@@ -135,14 +140,12 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
   };
 
   const editEmployee = async () => {
-    const employee = { ...editEmployeeInput };
-
     try {
       const response = await fetch(`${URL}/employees/${employee.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...editEmployeeInput,
+          ...employee,
         }),
       });
 
@@ -153,6 +156,22 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     }
 
     setIsEditable(false);
+  };
+
+  const deleteEmployee = async () => {
+    try {
+      const response = await fetch(`${URL}/employees/${employee.id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      return data;
+    } catch (error) {
+      return error;
+    }
   };
 
   const handleNewEmployeeInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -166,7 +185,7 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
   const handleEditEmployeeInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
-    setEditEmployeeInput((prev) => {
+    setEmployee((prev) => {
       return { ...prev, [name]: value };
     });
   };
@@ -210,6 +229,14 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     editEmployee();
   };
 
+  const handleDelete = async () => {
+    await deleteEmployee();
+
+    setAllowDelete(false);
+    await getEmployees();
+    navigate("/employees");
+  };
+
   const toggleEditing = (id: string) => {
     if (isEditable && id) getSingleEmployee(id);
     setIsEditable((prev) => !prev);
@@ -224,14 +251,17 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
       value={{
         employeesList,
         newEmployeeInput,
-        editEmployeeInput,
+        employee,
         isEditable,
+        allowDelete,
         handleNewEmployeeInput,
         handleNewEmployeeSubmit,
         getSingleEmployee,
         handleEditEmployeeInput,
         handleEditEmployee,
         toggleEditing,
+        setAllowDelete,
+        handleDelete,
       }}
     >
       {children}
