@@ -1,23 +1,19 @@
 import { useParams } from "react-router-dom";
 import "./EmployeeDetails.scss";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { EmployeesContext } from "../../context/EmployeesContext";
 
 export const EmployeeDetails = () => {
   const { id } = useParams();
-  const [isEditable, setIsEditable] = useState(false);
 
   const {
     editEmployeeInput,
+    isEditable,
     handleEditEmployeeInput,
     handleEditEmployee,
     getSingleEmployee,
+    toggleEditing,
   } = useContext(EmployeesContext);
-
-  const toggleEditing = () => {
-    if (isEditable && id) getSingleEmployee(id);
-    setIsEditable((prev) => !prev);
-  };
 
   useEffect(() => {
     if (id) getSingleEmployee(id);
@@ -137,17 +133,15 @@ export const EmployeeDetails = () => {
           />
         </label>
         {!isEditable && (
-          <button type="button" onClick={toggleEditing}>
+          <button type="button" onClick={() => toggleEditing(id!)}>
             Edytuj pracownika
           </button>
         )}
 
         {isEditable && (
           <>
-            <button type="submit" onClick={toggleEditing}>
-              Zapisz
-            </button>
-            <button type="button" onClick={toggleEditing}>
+            <button type="submit">Zapisz</button>
+            <button type="button" onClick={() => toggleEditing(id!)}>
               Anuluj
             </button>
           </>

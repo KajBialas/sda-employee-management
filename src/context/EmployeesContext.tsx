@@ -24,11 +24,13 @@ type EmployeesContextProps = {
   employeesList: EmployeeType[];
   newEmployeeInput: EmployeeType;
   editEmployeeInput: EmployeeType;
+  isEditable: boolean;
   handleNewEmployeeInput: (event: ChangeEvent<HTMLInputElement>) => void;
   handleNewEmployeeSubmit: (event: FormEvent<HTMLFormElement>) => void;
   getSingleEmployee: (id: string) => Promise<any>;
   handleEditEmployeeInput: (event: ChangeEvent<HTMLInputElement>) => void;
   handleEditEmployee: (event: FormEvent<HTMLFormElement>) => void;
+  toggleEditing: (id: string) => void;
 };
 
 type EmployeesProviderProps = {
@@ -57,6 +59,7 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
   const [editEmployeeInput, setEditEmployeeInput] = useState(
     {} as EmployeeType
   );
+  const [isEditable, setIsEditable] = useState(false);
 
   // wprowadzamy funkcję do pobrania danych
   const getEmployees = async () => {
@@ -148,6 +151,8 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     } catch (error) {
       return error;
     }
+
+    setIsEditable(false);
   };
 
   const handleNewEmployeeInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -205,6 +210,11 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     editEmployee();
   };
 
+  const toggleEditing = (id: string) => {
+    if (isEditable && id) getSingleEmployee(id);
+    setIsEditable((prev) => !prev);
+  };
+
   useEffect(() => {
     getEmployees();
   }, []);
@@ -215,11 +225,13 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
         employeesList,
         newEmployeeInput,
         editEmployeeInput,
+        isEditable,
         handleNewEmployeeInput,
         handleNewEmployeeSubmit,
         getSingleEmployee,
         handleEditEmployeeInput,
         handleEditEmployee,
+        toggleEditing,
       }}
     >
       {children}
