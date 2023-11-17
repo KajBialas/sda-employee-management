@@ -23,8 +23,12 @@ type EmployeeType = {
 type EmployeesContextProps = {
   employeesList: EmployeeType[];
   newEmployeeInput: EmployeeType;
+  editEmployeeInput: EmployeeType;
   handleNewEmployeeInput: (event: ChangeEvent<HTMLInputElement>) => void;
   handleNewEmployeeSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  getSingleEmployee: (id: string) => Promise<any>;
+  handleEditEmployeeInput: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleEditEmployee: (event: FormEvent<HTMLFormElement>) => void;
 };
 
 type EmployeesProviderProps = {
@@ -50,6 +54,9 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     status: "",
     phone: "",
   });
+  const [editEmployeeInput, setEditEmployeeInput] = useState(
+    {} as EmployeeType
+  );
 
   // wprowadzamy funkcję do pobrania danych
   const getEmployees = async () => {
@@ -60,7 +67,24 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
         throw new Error("Somethnig went wrong while fetching Employees");
 
       const data = await response.json();
+
       setEmployeesList(data);
+      return data;
+    } catch (error) {
+      throw new Error();
+    }
+  };
+
+  const getSingleEmployee = async (id: string) => {
+    try {
+      const response = await fetch(`${URL}/employees/${id}`);
+
+      if (!response.ok)
+        throw new Error("Somethnig went wrong while fetching Employee");
+
+      const data = await response.json();
+
+      setEditEmployeeInput(data);
       return data;
     } catch (error) {
       throw new Error();
@@ -107,10 +131,37 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     }
   };
 
+  const editEmployee = async () => {
+    const employee = { ...editEmployeeInput };
+
+    try {
+      const response = await fetch(`${URL}/employees/${employee.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...editEmployeeInput,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      return error;
+    }
+  };
+
   const handleNewEmployeeInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setNewEmployeeInput((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
+
+  const handleEditEmployeeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setEditEmployeeInput((prev) => {
       return { ...prev, [name]: value };
     });
   };
@@ -148,6 +199,12 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     if (typeof employee === "object") getEmployees();
   };
 
+  const handleEditEmployee = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    editEmployee();
+  };
+
   useEffect(() => {
     getEmployees();
   }, []);
@@ -157,8 +214,12 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
       value={{
         employeesList,
         newEmployeeInput,
+        editEmployeeInput,
         handleNewEmployeeInput,
         handleNewEmployeeSubmit,
+        getSingleEmployee,
+        handleEditEmployeeInput,
+        handleEditEmployee,
       }}
     >
       {children}

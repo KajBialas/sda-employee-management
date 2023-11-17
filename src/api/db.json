@@ -2,10 +2,10 @@
   "employees": [
     {
       "id": 1,
-      "firstName": "Jan",
+      "firstName": "Janusz",
       "lastName": "Kowalski",
       "birthDate": "1985-05-15",
-      "address": "Kwiatowa 5",
+      "address": "Kwiatowa 8",
       "city": "Warszawa",
       "postalCode": "00-001",
       "salary": 5000,
@@ -131,6 +131,30 @@
       "status": "test",
       "phone": "testtesttestt",
       "id": 11
+    },
+    {
+      "firstName": "",
+      "lastName": "",
+      "birthDate": "",
+      "address": "",
+      "city": "",
+      "postalCode": "",
+      "salary": 0,
+      "status": "",
+      "phone": "",
+      "id": 12
+    },
+    {
+      "firstName": "",
+      "lastName": "",
+      "birthDate": "",
+      "address": "",
+      "city": "",
+      "postalCode": "",
+      "salary": 0,
+      "status": "",
+      "phone": "",
+      "id": 13
     }
   ]
 }
