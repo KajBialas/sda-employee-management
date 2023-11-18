@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 type EmployeeType = {
   id?: number;
@@ -23,8 +24,17 @@ type EmployeeType = {
 type EmployeesContextProps = {
   employeesList: EmployeeType[];
   newEmployeeInput: EmployeeType;
+  employee: EmployeeType;
+  isEditable: boolean;
+  allowDelete: boolean;
   handleNewEmployeeInput: (event: ChangeEvent<HTMLInputElement>) => void;
   handleNewEmployeeSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  getSingleEmployee: (id: string) => Promise<any>;
+  handleEditEmployeeInput: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleEditEmployee: (event: FormEvent<HTMLFormElement>) => void;
+  toggleEditing: (id: string) => void;
+  setAllowDelete: React.Dispatch<React.SetStateAction<boolean>>;
+  handleDelete: () => void;
 };
 
 type EmployeesProviderProps = {
@@ -50,6 +60,11 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     status: "",
     phone: "",
   });
+  const [employee, setEmployee] = useState({} as EmployeeType);
+  const [isEditable, setIsEditable] = useState(false);
+  const [allowDelete, setAllowDelete] = useState(false);
+
+  const navigate = useNavigate();
 
   // wprowadzamy funkcję do pobrania danych
   const getEmployees = async () => {
@@ -60,7 +75,24 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
         throw new Error("Somethnig went wrong while fetching Employees");
 
       const data = await response.json();
+
       setEmployeesList(data);
+      return data;
+    } catch (error) {
+      throw new Error();
+    }
+  };
+
+  const getSingleEmployee = async (id: string) => {
+    try {
+      const response = await fetch(`${URL}/employees/${id}`);
+
+      if (!response.ok)
+        throw new Error("Somethnig went wrong while fetching Employee");
+
+      const data = await response.json();
+
+      setEmployee(data);
       return data;
     } catch (error) {
       throw new Error();
@@ -107,10 +139,53 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     }
   };
 
+  const editEmployee = async () => {
+    try {
+      const response = await fetch(`${URL}/employees/${employee.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...employee,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      return error;
+    }
+
+    setIsEditable(false);
+  };
+
+  const deleteEmployee = async () => {
+    try {
+      const response = await fetch(`${URL}/employees/${employee.id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+
   const handleNewEmployeeInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setNewEmployeeInput((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
+
+  const handleEditEmployeeInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setEmployee((prev) => {
       return { ...prev, [name]: value };
     });
   };
@@ -148,6 +223,25 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
     if (typeof employee === "object") getEmployees();
   };
 
+  const handleEditEmployee = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    editEmployee();
+  };
+
+  const handleDelete = async () => {
+    await deleteEmployee();
+
+    setAllowDelete(false);
+    await getEmployees();
+    navigate("/employees");
+  };
+
+  const toggleEditing = (id: string) => {
+    if (isEditable && id) getSingleEmployee(id);
+    setIsEditable((prev) => !prev);
+  };
+
   useEffect(() => {
     getEmployees();
   }, []);
@@ -157,8 +251,17 @@ export const EmployeesProvider = ({ children }: EmployeesProviderProps) => {
       value={{
         employeesList,
         newEmployeeInput,
+        employee,
+        isEditable,
+        allowDelete,
         handleNewEmployeeInput,
         handleNewEmployeeSubmit,
+        getSingleEmployee,
+        handleEditEmployeeInput,
+        handleEditEmployee,
+        toggleEditing,
+        setAllowDelete,
+        handleDelete,
       }}
     >
       {children}
