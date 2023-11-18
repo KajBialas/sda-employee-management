@@ -3,21 +3,28 @@ import "./App.scss";
 import { Home } from "./components/Home";
 import { EmployeesList } from "./components/EmployeesList";
 import { EmployeeDetails } from "./components/EmployeeDetails";
+import { Footer } from "./components/Footer";
+import { Header } from "./components/Header";
 import { EmployeesProvider } from "./context/EmployeesContext";
 import { NewEmployee } from "./components/NewEmployee";
 
 function App() {
   return (
-    <EmployeesProvider>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Home />} />;
-          <Route path="/employees" element={<EmployeesList />} />;
-          <Route path="/employees/:id" element={<EmployeeDetails />} />;
-          <Route path="/employees/new" element={<NewEmployee />} />
-        </Routes>
-      </div>
-    </EmployeesProvider>
+    <>
+      <Header />
+      <>
+        <EmployeesProvider>
+          <div className="App">
+            <Routes>
+              <Route path="/" element={<Home />} />;
+              <Route path="/employees" element={<EmployeesList />} />;
+              <Route path="/employees/:id" element={<EmployeeDetails />} />;
+            </Routes>
+          </div>
+        </EmployeesProvider>
+      </>
+      <Footer />
+    </>
   );
 }
 

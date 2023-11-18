@@ -1,4 +1,6 @@
 import "./Home.scss";
+import { useContext } from "react";
+import { EmployeesContext } from "../../context/EmployeesContext";
 
 export const Home = () => {
   const { employeesList } = useContext(EmployeesContext);
