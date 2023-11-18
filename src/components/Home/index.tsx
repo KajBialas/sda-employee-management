@@ -1,5 +1,5 @@
-import "./Home.scss";
 import { useContext } from "react";
+import "./Home.scss";
 import { EmployeesContext } from "../../context/EmployeesContext";
 
 export const Home = () => {
