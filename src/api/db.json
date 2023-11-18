@@ -119,6 +119,18 @@
       "salary": 5700,
       "status": "Aktywny",
       "phone": "555-666-777"
+    },
+    {
+      "firstName": "test",
+      "lastName": "test",
+      "birthDate": "31132-12-13",
+      "address": "test",
+      "city": "test",
+      "postalCode": "134444",
+      "salary": "12312",
+      "status": "test",
+      "phone": "testtesttestt",
+      "id": 11
     }
   ]
 }
