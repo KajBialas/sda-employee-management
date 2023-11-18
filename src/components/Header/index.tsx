@@ -10,7 +10,7 @@ export const Header = () => {
         <h1 className="header__title">Employee Management App</h1>
         <ul className="header__list">
           <li>
-            <NavLink to={"/home"} className="header__list-item">
+            <NavLink to={"/"} className="header__list-item">
               Home
             </NavLink>
           </li>
